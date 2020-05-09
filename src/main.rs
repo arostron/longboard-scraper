@@ -18,12 +18,13 @@ fn main() {
 		result.text().unwrap().to_string()
 	)
 	.map(|content|
-		reee.find(&content)
-		.expect("no match") // theres a better way to do this too
-		.as_str()
-		.to_string()
+		// i guess this is better
+		match reee.find(&content) {
+			Some(m) => Some(m.as_str().to_string()),
+			None => None,
+		}
 	)
-	.filter_map(|data| Some(data))
+	.filter_map(|m| m) // filter None
 	.for_each(|data| println!("{}", data))
 	;
 }
