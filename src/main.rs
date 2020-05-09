@@ -9,18 +9,19 @@ fn main() {
 
 	let reee = Regex::new(i_hate_regex).unwrap();
 
-	boards.iter()
+	boards.into_iter()
 	.map(|board| format!("{}{}", base_url, board))
 	.map(|url| get(url)) // make get requetsts
 	.filter_map(Result::ok) // ignore get reqeust errors
-	.map(|result| result.content()) // get body of webpage
-	.filter_map(|content| Some(content)) // ignore parse fails
-	.map(|content| std::str::from_utf8(content)) // convert to str
-	.filter_map(Result::ok)
+	.map(|result|
+		// I hate this line of code so much
+		result.text().unwrap().to_string()
+	)
 	.map(|content|
-		reee.find(content)
-		.expect("no match")
+		reee.find(&content)
+		.expect("no match") // theres a better way to do this too
 		.as_str()
+		.to_string()
 	)
 	.filter_map(|data| Some(data))
 	.for_each(|data| println!("{}", data))
