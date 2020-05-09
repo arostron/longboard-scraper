@@ -9,7 +9,7 @@ fn main() {
 
 	let reee = Regex::new(i_hate_regex).unwrap();
 
-	boards.into_iter()
+	boards.iter()
 	.map(|board| format!("{}{}", base_url, board))
 	.map(|url| get(url)) // make get requetsts
 	.filter_map(Result::ok) // ignore get reqeust errors
