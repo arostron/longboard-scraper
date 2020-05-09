@@ -1,5 +1,6 @@
 use requests::get;
 use regex::Regex;
+use rayon::prelude::*;
 
 fn main() {
 	let boards = vec!["dinghy-blunt-hyena", "dinghy-crown-peak",  "dinghy-turbo-king", "dinghy-turbo", "tugboat-wolf"];
@@ -9,7 +10,7 @@ fn main() {
 
 	let reee = Regex::new(i_hate_regex).unwrap();
 
-	boards.iter()
+	boards.par_iter()
 	.map(|board| format!("{}{}", base_url, board))
 	.map(|url| get(url)) // make get requetsts
 	.filter_map(Result::ok) // ignore get reqeust errors
